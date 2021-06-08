@@ -28,14 +28,14 @@ class MainViewModel @ViewModelInject constructor(
 
     private suspend fun getRecipesSafeCall(queries: Map<String, String>) {
         recipesResponse.value = NetworkResult.Loading()
-//        if (hasInternetConnection()) {
-//            try {
-//                val response = repository.remote.getRecipes(queries)
-//                recipesResponse.value = handleFoodRecipesResponse(response)
-//            } catch (e: Exception) {
-//                recipesResponse.value = NetworkResult.Error("Recipes not found.")
-//            }
-//        } else {
+        if (hasInternetConnection()) {
+            try {
+                val response = repository.remote.getRecipes(queries)
+                recipesResponse.value = handleFoodRecipesResponse(response)
+            } catch (e: Exception) {
+                recipesResponse.value = NetworkResult.Error("Recipes not found.")
+            }
+        } else {
             recipesResponse.value = NetworkResult.Error("No Internet Connection.")
         }
     }
@@ -61,18 +61,18 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-//    private fun hasInternetConnection(): Boolean {
-//        val connectivityManager = getApplication<Application>().getSystemService(
-//            Context.CONNECTIVITY_SERVICE
-//        ) as ConnectivityManager
-//        val activeNetwork = connectivityManager.activeNetwork ?: return false
-//        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-//        return when {
-//            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-//            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-//            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-//            else -> false
-//        }
-//    }
+    private fun hasInternetConnection(): Boolean {
+        val connectivityManager = getApplication<Application>().getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+        return when {
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            else -> false
+        }
+    }
 
-//}
+}
